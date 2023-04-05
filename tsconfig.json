@@ -1,0 +1,14 @@
+{
+  "ts-node": {
+    "swc": true
+  },
+  "extend": "@tsconfig/node18/tsconfig.json",
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true
+  }
+}
