@@ -9,7 +9,7 @@
     "db:start": "docker compose up -d",
     "db:seed": "npx sequelize-cli db:seed:all",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "dev": "ts-node src/index.ts"
+    "dev": "nodemon -w src --exec ts-node src/index.ts"
   },
   "author": "McQueen Solutions",
   "license": "MIT",
@@ -26,10 +26,11 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
-    "fastify": "^4.15.0",
     "@fastify/cors": "^8.2.1",
     "dotenv": "^16.0.3",
+    "fastify": "^4.15.0",
     "http-errors": "^2.0.0",
+    "nodemon": "^2.0.22",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.19.0"
