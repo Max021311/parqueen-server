@@ -1,4 +1,5 @@
 import type { FastifyPluginCallback } from 'fastify'
+import authRoutePlugin from './auth'
 
 const routePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   instance.route({
@@ -10,6 +11,9 @@ const routePlugin: FastifyPluginCallback = (instance, _opts, done) => {
       return reply.code(200).send('ok')
     }
   })
+
+  instance.register(authRoutePlugin)
+
   done()
 }
 
