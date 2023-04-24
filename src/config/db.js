@@ -1,3 +1,6 @@
+const { config } = require('dotenv')
+config()
+
 const {
   DB_HOST,
   DB_PASSWORD,
@@ -9,7 +12,7 @@ const {
 /**
   * @type {import('sequelize').Options}
   */
-export default {
+module.exports = {
   username: DB_USER || 'postgres',
   password: DB_PASSWORD || 'postgres',
   database: DB_NAME || 'postgres',
