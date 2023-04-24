@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "@fastify/cors": "^8.2.1",
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "http-errors": "^2.0.0",
