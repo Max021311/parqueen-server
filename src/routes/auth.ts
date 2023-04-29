@@ -2,6 +2,7 @@ import type { FastifyPluginCallback } from 'fastify'
 import models from './../models'
 import { services } from './../service'
 import { Unauthorized } from 'http-errors'
+import { verifyToken } from './../pre-handler/auth'
 
 const authRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   interface AuthBody {
@@ -41,6 +42,22 @@ const authRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
       const token = await services.auth.createToken(user.getDataValue('id'))
       await reply.code(200).send({ token })
     }
+  })
+
+  instance.route({
+    method: 'GET',
+    url: '/auth',
+    schema: {
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: { type: 'string' }
+        },
+        required: ['Authorization']
+      }
+    },
+    preHandler: verifyToken,
+    handler: () => 'ok'
   })
 
   done()
