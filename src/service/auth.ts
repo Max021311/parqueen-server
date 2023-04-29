@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken'
+import { JwtPayload, sign, verify, type VerifyErrors } from 'jsonwebtoken'
 import { ServiceParams } from '.'
 import { compare } from 'bcrypt'
 
@@ -15,6 +15,18 @@ export default class AuthService {
           reject(err)
         }
         resolve(token)
+      })
+    })
+  }
+
+  /**
+    * @throws {VerifyErrors}
+    */
+  verifyToken (token: string) {
+    return new Promise<string | JwtPayload | undefined>((resolve, reject) => {
+      verify(token, this.secret, (err, data) => {
+        if (err) { reject(err) }
+        resolve(data)
       })
     })
   }
