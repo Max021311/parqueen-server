@@ -1,6 +1,7 @@
 import type { FastifyPluginCallback } from 'fastify'
 import models from './../models'
-import { compare } from 'bcrypt'
+import { services } from './../service'
+import { Unauthorized } from 'http-errors'
 
 const authRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   interface AuthBody {
@@ -26,21 +27,22 @@ const authRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
     async handler (request, reply) {
       const { email, password } = request.body
       const user = await models.UserModel.findOne({ where: { email } })
+
       if (user === null) {
-        reply.code(401).send('Unauthorized')
-        return
+        throw Unauthorized('Unauthorized')
       }
 
-      const isSame = await compare(password, user.getDataValue('password'))
+      const isSame = await services.auth.compare(password, user.getDataValue('password'))
 
       if (!isSame) {
-        reply.code(401).send('Unauthorized')
-        return
+        throw Unauthorized('Unauthorized')
       }
 
-      reply.code(200).send()
+      const token = await services.auth.createToken(user.getDataValue('id'))
+      await reply.code(200).send({ token })
     }
   })
+
   done()
 }
 
