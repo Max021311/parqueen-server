@@ -5,6 +5,7 @@
   "extend": "@tsconfig/node18/tsconfig.json",
   "include": ["src/**/*"],
   "compilerOptions": {
+    "esModuleInterop": true,
     "allowJs": true,
     "checkJs": true,
     "outDir": "./dist",

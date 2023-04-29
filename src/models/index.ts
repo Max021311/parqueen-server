@@ -1,8 +1,9 @@
 'use strict'
 import * as Sequelize from 'sequelize'
-import config from './../config/db.mjs'
+import config from './../config/db.js'
 import buildTicketModel from './ticket'
 import buildParkingPlaceModel from './parking-place'
+import buildUserModel from './user'
 
 const sequelize = new Sequelize.Sequelize(config)
 
@@ -10,7 +11,8 @@ const db = {
   sequelize: sequelize,
   Sequelize: Sequelize,
   TicketModel: buildTicketModel(sequelize),
-  ParkingPlaceModel: buildParkingPlaceModel(sequelize)
+  ParkingPlaceModel: buildParkingPlaceModel(sequelize),
+  UserModel: buildUserModel(sequelize)
 }
 
 export type Models = typeof db
