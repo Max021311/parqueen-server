@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "A01",
+    "type": "normal",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 1],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A02",
+    "type": "normal",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 2],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A03",
+    "type": "normal",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 3],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A04",
+    "type": "normal",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 4],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A05",
+    "type": "big",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 5],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A06",
+    "type": "big",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 6],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A07",
+    "type": "big",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 7],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A08",
+    "type": "big",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 8],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A09",
+    "type": "special",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 9],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A10",
+    "type": "special",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 10],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A11",
+    "type": "special",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 11],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  },
+  {
+    "slug": "A12",
+    "type": "special",
+    "isActive": true,
+    "position": {
+      "type": "Point",
+      "coordinates": [2, 12],
+      "crs": { "type": "name", "properties": { "name": "EPSG:0" } }
+    }
+  }
+]
