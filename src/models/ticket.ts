@@ -1,6 +1,7 @@
 'use strict'
 import { Model, Sequelize, DataTypes } from 'sequelize'
-import { Models } from '.'
+import type { Models } from '.'
+
 interface Ticket {
   id: number
   entry_date: Date
@@ -8,10 +9,10 @@ interface Ticket {
   parking_place_id: number
 }
 
-export class TicketModel extends Model<Ticket, Omit<Ticket, 'id' | 'entryDate' | 'departureDate'>> {
+export class TicketModel extends Model<Ticket, Omit<Ticket, 'id' | 'departure_date'>> {
   static associate (models: Models) {
     TicketModel.belongsTo(models.ParkingPlaceModel, {
-      foreignKey: 'parkingPlaceId',
+      foreignKey: 'parking_place_id',
       as: 'parking_place'
     })
   }
@@ -22,7 +23,7 @@ export default function (sequelize: Sequelize) {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true
     },
     entry_date: {
       type: DataTypes.DATE,
@@ -30,7 +31,8 @@ export default function (sequelize: Sequelize) {
     },
     departure_date: DataTypes.DATE,
     parking_place_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     createdAt: false,
