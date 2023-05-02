@@ -6,6 +6,8 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
     "outDir": "./dist",
