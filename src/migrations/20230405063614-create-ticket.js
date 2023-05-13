@@ -4,7 +4,6 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('tickets', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
@@ -25,6 +24,19 @@ module.exports = {
           key: 'id'
         }
       }
+    })
+    
+    /**
+     * ```sql
+     * CREATE INDEX tickets_parking_place_id ON tickets (parking_place_id) WHERE (departure_date IS NULL)
+     * ```
+     */
+    await queryInterface.addIndex('tickets', {
+      fields: ['parking_place_id'],
+      where: {
+        departure_date: null
+      },
+      unique: true
     })
   },
   async down (queryInterface) {

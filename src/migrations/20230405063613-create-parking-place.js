@@ -11,6 +11,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      slug: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+        unique: true
+      },
       type: {
         type: Sequelize.ENUM(...placeTypeEnum),
         values: placeTypeEnum,
@@ -18,6 +23,10 @@ module.exports = {
       },
       isActive: {
         type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
+      position: {
+        type: Sequelize.GEOMETRY('POINT', 0),
         allowNull: false
       }
     })
