@@ -1,15 +1,31 @@
 'use strict'
-import { Model, Sequelize, DataTypes } from 'sequelize'
+import {
+  Model,
+  Sequelize,
+  DataTypes,
+  NonAttribute,
+  Association,
+  InferAttributes,
+  InferCreationAttributes,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin
+} from 'sequelize'
 import type { Models } from '.'
+import type { ParkingPlaceModel } from './parking-place'
 
-interface Ticket {
-  id: number
-  entry_date: Date
-  departure_date: Date
-  parking_place_id: number
-}
+/* eslint-disable no-use-before-define */
+export class TicketModel extends Model<
+  InferAttributes<TicketModel>,
+  InferCreationAttributes<TicketModel, { omit: 'id' | 'departure_date' }>
+  > {
+  declare id: number
+  declare entry_date: Date
+  declare departure_date: Date
+  declare parking_place_id: number
 
-export class TicketModel extends Model<Ticket, Omit<Ticket, 'id' | 'departure_date'>> {
+  declare parking_place?: NonAttribute<ParkingPlaceModel>
+  declare public static associations: { projects: Association<TicketModel, ParkingPlaceModel> }
+
   static associate (models: Models) {
     TicketModel.belongsTo(models.ParkingPlaceModel, {
       foreignKey: 'parking_place_id',
@@ -17,6 +33,7 @@ export class TicketModel extends Model<Ticket, Omit<Ticket, 'id' | 'departure_da
     })
   }
 }
+/* eslint-enable no-use-before-define */
 
 export default function (sequelize: Sequelize) {
   TicketModel.init({

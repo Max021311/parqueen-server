@@ -31,15 +31,6 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
           type: {
             type: 'string',
             enum: PARKING_PLACE_TYPES
-          },
-          position: {
-            type: 'array',
-            items: {
-              type: 'integer',
-              minimum: 0
-            },
-            maxItems: 2,
-            minItems: 2
           }
         },
         required: ['position', 'type'],
@@ -85,7 +76,10 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
         parking_place_id: parkingPlace.id
       })
 
-      reply.code(201).send(ticket.toJSON())
+      reply.code(201).send({
+        ...ticket.toJSON(),
+        parking_place: parkingPlace.toJSON()
+      })
     }
   })
 
