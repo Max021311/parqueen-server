@@ -33,7 +33,7 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
             enum: PARKING_PLACE_TYPES
           }
         },
-        required: ['position', 'type'],
+        required: ['type'],
         additionalProperties: false
       }
     },
