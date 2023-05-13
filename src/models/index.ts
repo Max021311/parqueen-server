@@ -4,6 +4,7 @@ import config from './../config/db.js'
 import buildTicketModel from './ticket'
 import buildParkingPlaceModel from './parking-place'
 import buildUserModel from './user'
+import buildTerminalModel from './terminal'
 
 const sequelize = new Sequelize.Sequelize(config)
 
@@ -12,7 +13,8 @@ const db = {
   Sequelize: Sequelize,
   TicketModel: buildTicketModel(sequelize),
   ParkingPlaceModel: buildParkingPlaceModel(sequelize),
-  UserModel: buildUserModel(sequelize)
+  UserModel: buildUserModel(sequelize),
+  TerminalModel: buildTerminalModel(sequelize)
 }
 
 export type Models = typeof db
