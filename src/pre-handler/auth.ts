@@ -37,3 +37,39 @@ export const verifyToken: preHandlerAsyncHookHandler = async function verifyToke
     throw error
   }
 }
+
+export const verifyTerminalToken: preHandlerAsyncHookHandler = async function verifyTerminalToken (request) {
+  const authorization = request.headers.authorization
+  if (typeof authorization !== 'string') {
+    throw new Unauthorized('Missing authorization header or must be string')
+  }
+  const [type, token] = authorization.split(' ')
+  if (type !== 'Bearer') {
+    throw new BadRequest('Bad token scheme')
+  }
+
+  try {
+    const payload = await services.auth.verifyToken(token)
+    if (typeof payload === 'undefined') { throw new BadRequest('Bad token') }
+    if (typeof payload === 'string') { throw new BadRequest('Bad token') }
+    if (typeof payload.id !== 'number') { throw new BadRequest('Bad token') }
+    if (typeof payload.scope !== 'string') { throw new BadRequest('Bad token') }
+    if (payload.scope !== 'terminal') { throw new BadRequest('Bad token') }
+
+    const id = payload.id
+    const terminal = await models.TerminalModel.findByPk(id)
+    if (terminal === null) { throw new Unauthorized() }
+    request.terminal = terminal
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      throw new Unauthorized(`Token expired at ${error.expiredAt.toISOString()}`)
+    }
+    if (error instanceof JsonWebTokenError) {
+      throw new BadRequest('Bad token')
+    }
+    if (error instanceof NotBeforeError) {
+      throw new Unauthorized(`Token active before ${error.date.toISOString()}`)
+    }
+    throw error
+  }
+}
