@@ -3,6 +3,7 @@ import models from './../models'
 import { col, fn, Op } from 'sequelize'
 import { ServiceUnavailable } from 'http-errors'
 import { PARKING_PLACE_TYPES } from './../constants/parking-places-type'
+import { verifyTerminalToken } from './../pre-handler/auth'
 
 const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   instance.route<{
@@ -14,17 +15,16 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
     method: 'POST',
     url: '/assign-parking-place',
     schema: {
-      // TODO: Implement tokens for terminals
-      // headers: {
-      //   type: 'object',
-      //   properties: {
-      //     Authorization: {
-      //       type: 'string',
-      //       description: 'Token of the terminal'
-      //     }
-      //   },
-      //   required: ['Authorization']
-      // },
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Token of the terminal'
+          }
+        },
+        required: ['Authorization']
+      },
       body: {
         type: 'object',
         properties: {
@@ -40,14 +40,15 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
             },
             maxItems: 2,
             minItems: 2
-          },
+          }
         },
         required: ['position', 'type'],
         additionalProperties: false
       }
     },
+    preHandler: verifyTerminalToken,
     async handler (request, reply) {
-      const [x, y] = request.body.position
+      const { coordinates: [x, y] } = request.terminal.position
       const type = request.body.type
 
       const parkingPlace = await models.ParkingPlaceModel.findOne({
