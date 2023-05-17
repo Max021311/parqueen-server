@@ -83,6 +83,28 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
     }
   })
 
+  instance.route({
+    method: 'GET',
+    url: '/parking-places',
+    preHandler: verifyTerminalToken,
+    async handler (_request, reply) {
+      const parkingPlaces = await models.ParkingPlaceModel.findAll({
+        order: [
+          ['slug', 'ASC']
+        ],
+        include: [{
+          association: 'tickets',
+          where: {
+            departure_date: null
+          },
+          required: false
+        }],
+        subQuery: false
+      })
+      await reply.code(200).send(parkingPlaces)
+    }
+  })
+
   done()
 }
 
