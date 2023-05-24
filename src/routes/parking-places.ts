@@ -3,7 +3,7 @@ import models from './../models'
 import { col, fn, Op } from 'sequelize'
 import { ServiceUnavailable } from 'http-errors'
 import { PARKING_PLACE_TYPES } from './../constants/parking-places-type'
-import { verifyTerminalToken } from './../pre-handler/auth'
+import { verifyTerminalToken, verifyToken } from './../pre-handler/auth'
 
 const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   instance.route<{
@@ -86,7 +86,7 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
   instance.route({
     method: 'GET',
     url: '/parking-places',
-    preHandler: verifyTerminalToken,
+    preHandler: verifyToken,
     async handler (_request, reply) {
       const parkingPlaces = await models.ParkingPlaceModel.findAll({
         order: [
