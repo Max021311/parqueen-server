@@ -4,6 +4,7 @@ import { col, fn, Op } from 'sequelize'
 import { ServiceUnavailable, BadRequest, Conflict } from 'http-errors'
 import { PARKING_PLACE_TYPES } from './../constants/parking-places-type'
 import { verifyTerminalToken, verifyToken } from './../pre-handler/auth'
+import { CreateParkingPlace } from './../models/parking-place'
 
 const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) => {
   instance.route<{
@@ -107,10 +108,81 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
 
   instance.route<{
     Params: { id: number }
+    Body: Partial<CreateParkingPlace>
+  }>({
+    method: 'PUT',
+    url: '/parking-place/:id',
+    schema: {
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Token of the terminal'
+          }
+        },
+        required: ['Authorization']
+      },
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' }
+        },
+        required: ['id']
+      },
+      body: {
+        type: 'object',
+        properties: {
+          slug: { type: 'string' },
+          position: {
+            type: 'object',
+            properties: {
+              type: { const: 'Point' },
+              coordinates: {
+                type: 'array',
+                items: { type: 'number' },
+                minItems: 2,
+                maxItems: 2
+              }
+            },
+            required: ['type', 'coordinates']
+          },
+          type: {
+            type: 'string',
+            enum: PARKING_PLACE_TYPES
+          },
+          isActive: { type: 'boolean' }
+        }
+      }
+    },
+    preHandler: verifyToken,
+    async handler (request, reply) {
+      const body = request.body
+      const [affectedCount] = await models.ParkingPlaceModel.update(body, {
+        where: {
+          id: request.params.id
+        }
+      })
+      reply.code(200).send({ affectedCount })
+    }
+  })
+
+  instance.route<{
+    Params: { id: number }
   }>({
     method: 'POST',
     url: '/ticket/:id/register-exit',
     schema: {
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Token of the terminal'
+          }
+        },
+        required: ['Authorization']
+      },
       params: {
         type: 'object',
         properties: {
