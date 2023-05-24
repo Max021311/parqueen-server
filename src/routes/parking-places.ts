@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback } from 'fastify'
 import models from './../models'
 import { col, fn, Op } from 'sequelize'
-import { ServiceUnavailable } from 'http-errors'
+import { ServiceUnavailable, BadRequest, Conflict } from 'http-errors'
 import { PARKING_PLACE_TYPES } from './../constants/parking-places-type'
 import { verifyTerminalToken, verifyToken } from './../pre-handler/auth'
 
@@ -102,6 +102,35 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
         subQuery: false
       })
       await reply.code(200).send(parkingPlaces)
+    }
+  })
+
+  instance.route<{
+    Params: { id: number }
+  }>({
+    method: 'POST',
+    url: '/ticket/:id/register-exit',
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' }
+        },
+        required: ['id']
+      }
+    },
+    preHandler: verifyTerminalToken,
+    async handler (request, reply) {
+      const ticket = await models.TicketModel.findByPk(request.params.id)
+      if (ticket === null) {
+        throw BadRequest('Unknow ID')
+      }
+      if (ticket.departure_date !== null) {
+        throw Conflict('Departure date already defined')
+      }
+      ticket.departure_date = new Date()
+      await ticket.save()
+      reply.code(200).send(ticket.toJSON())
     }
   })
 
