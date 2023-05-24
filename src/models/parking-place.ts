@@ -12,10 +12,12 @@ import { Models } from '.'
 import { TicketModel } from './ticket'
 import { PARKING_PLACE_TYPES } from './../constants/parking-places-type'
 
+/* eslint-disable no-use-before-define */
+export type CreateParkingPlace = InferCreationAttributes<ParkingPlaceModel, { omit: 'id' | 'tickets' }>
 
 export class ParkingPlaceModel extends Model<
   InferAttributes<ParkingPlaceModel, { omit: 'tickets' }>,
-  InferCreationAttributes<ParkingPlaceModel , { omit: 'id' | 'tickets' }>
+  CreateParkingPlace
 > {
   declare id: number
   declare slug: string
@@ -34,6 +36,7 @@ export class ParkingPlaceModel extends Model<
     })
   }
 }
+/* eslint-enable no-use-before-define */
 
 export default function (sequelize: Sequelize) {
   ParkingPlaceModel.init({
