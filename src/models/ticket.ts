@@ -20,7 +20,7 @@ export class TicketModel extends Model<
   > {
   declare id: number
   declare entry_date: Date
-  declare departure_date: Date
+  declare departure_date: Date | null
   declare parking_place_id: number
 
   declare parking_place?: NonAttribute<ParkingPlaceModel>
