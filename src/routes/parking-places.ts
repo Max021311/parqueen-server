@@ -193,6 +193,7 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
         required: ['type', 'slug', 'position', 'isActive']
       }
     },
+    preHandler: verifyToken,
     async handler (request, reply) {
       try {
         console.log(request.body)
@@ -280,9 +281,13 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
         required: ['id']
       }
     },
-    preHandler: verifyTerminalToken,
+    preHandler: instance.auth([verifyTerminalToken, verifyToken]),
     async handler (request, reply) {
-      const ticket = await models.TicketModel.findByPk(request.params.id)
+      const ticket = await models.TicketModel.findByPk(request.params.id, {
+        include: [{
+          association: 'parking_place'
+        }]
+      })
       if (ticket === null) {
         throw BadRequest('Unknow ID')
       }
@@ -292,6 +297,41 @@ const parkingPlaceRoutePlugin: FastifyPluginCallback = (instance, _opts, done) =
       ticket.departure_date = new Date()
       await ticket.save()
       reply.code(200).send(ticket.toJSON())
+    }
+  })
+
+  instance.route<{
+    Params: { id: number }
+  }>({
+    method: 'GET',
+    url: '/ticket/:id',
+    schema: {
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Token of the terminal'
+          }
+        },
+        required: ['Authorization']
+      },
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' }
+        },
+        required: ['id']
+      }
+    },
+    preHandler: verifyToken,
+    async handler (request, reply) {
+      const ticket = await models.TicketModel.findByPk(request.params.id, {
+        include: [{
+          association: 'parking_place'
+        }]
+      })
+      reply.code(200).send(ticket)
     }
   })
 
