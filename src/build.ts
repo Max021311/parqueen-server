@@ -1,5 +1,6 @@
 import { fastify } from 'fastify'
 import { fastifyCors } from '@fastify/cors'
+import fastifyAuth from '@fastify/auth'
 import routes from './routes'
 
 export default function build (opts?: { prefix?: string }) {
@@ -11,6 +12,7 @@ export default function build (opts?: { prefix?: string }) {
 
   app.decorateRequest('user', null)
   app.register(fastifyCors)
+  app.register(fastifyAuth)
   app.register(routes, { prefix: opts?.prefix })
   return app
 }
